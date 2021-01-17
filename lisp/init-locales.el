@@ -62,5 +62,30 @@
 (require-package 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
+
+(let (
+      ($replacePairs
+       [
+        ["，" ","]
+        ["。" "."]
+        ["；" ";"]
+        ["：" ":"]
+        ["【" "["]
+        ["】" "]"]
+        ["（" "("]
+        ["）" ")"]
+        ["！" "!"]
+        ["、" "\\"]
+        ["／" "/"]
+        ["《" "<"]
+        ["》" ">"]
+        ["‘" "'"]
+        ["’" "'"]
+        ["“" "\""]
+        ["”" "\""]
+        ]
+       ))
+  (mapcar (lambda(x) (define-key key-translation-map
+                       (kbd (elt x 0)) (kbd (elt x 1)))) $replacePairs))
 (provide 'init-locales)
 ;;; init-locales.el ends here
