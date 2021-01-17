@@ -59,3 +59,5 @@ site-lisp/package/
 /url/
 /places
 /projects
+/projectile.cache
+/cnfonts/
