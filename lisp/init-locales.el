@@ -22,6 +22,9 @@
 (unless (eq system-type 'windows-nt)
   (set-selection-coding-system 'utf-8))
 
+(require-package 'cnfonts)
+(require-package 'undo-tree)
+(global-undo-tree-mode)
 
 (require-package 'flycheck-clj-kondo)
 
@@ -54,6 +57,10 @@
 
 (require-package 'ox-reveal)
 (load-library "ox-reveal")
+
+
+(require-package 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
 
 (provide 'init-locales)
 ;;; init-locales.el ends here
