@@ -21,6 +21,39 @@
 (setq locale-coding-system 'utf-8)
 (unless (eq system-type 'windows-nt)
   (set-selection-coding-system 'utf-8))
+
+
+(require-package 'flycheck-clj-kondo)
+
+(require 'flycheck-clj-kondo)
+
+(dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
+  (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
+
+
+
+(global-page-break-lines-mode)
+
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (page-break-lines-mode)))
+(add-hook 'clojurescript-mode-hook
+          (lambda ()
+            (page-break-lines-mode)))
+
+
+(set-fill-column 80)
+
+(cua-mode 1)
+
+(global-set-key
+ (kbd "<C-return>")
+ 'cua-set-rectangle-mark
+ )
+
+
+(require-package 'ox-reveal)
+(load-library "ox-reveal")
 
 (provide 'init-locales)
 ;;; init-locales.el ends here
