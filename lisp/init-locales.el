@@ -45,14 +45,14 @@
             (page-break-lines-mode)))
 
 
-(set-fill-column 80)
+;;(set-fill-column 80)
+(setq-default fill-column 80)
 
 (cua-mode 1)
 
 (global-set-key
  (kbd "<C-return>")
- 'cua-set-rectangle-mark
- )
+ 'cua-set-rectangle-mark)
 
 
 (require-package 'ox-reveal)
