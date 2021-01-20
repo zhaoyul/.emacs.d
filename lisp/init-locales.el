@@ -26,10 +26,10 @@
 (require-package 'undo-tree)
 (global-undo-tree-mode)
 
+(require-package 'keycast)
+
+
 (require-package 'flycheck-clj-kondo)
-
-(require 'flycheck-clj-kondo)
-
 (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
   (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
 
@@ -44,16 +44,13 @@
           (lambda ()
             (page-break-lines-mode)))
 
-
-;;(set-fill-column 80)
 (setq-default fill-column 80)
 
 (cua-mode 1)
-
+(setq cua-enable-cua-keys nil)
 (global-set-key
  (kbd "<C-return>")
  'cua-set-rectangle-mark)
-
 
 (require-package 'ox-reveal)
 (load-library "ox-reveal")
@@ -87,5 +84,15 @@
        ))
   (mapcar (lambda(x) (define-key key-translation-map
                        (kbd (elt x 0)) (kbd (elt x 1)))) $replacePairs))
+
+
+(require-package 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+
+(require-package 'ox-pandoc)
+(load-library "ox-pandoc")
+
+
 (provide 'init-locales)
 ;;; init-locales.el ends here
