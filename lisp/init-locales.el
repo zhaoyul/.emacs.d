@@ -33,6 +33,7 @@
 
 ;; 使用clj-kondo来做clj/cljc/cljs的语法检查, 需要安装clj-kondo
 (require-package 'flycheck-clj-kondo)
+(require 'flycheck-clj-kondo)
 (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
   (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
 
