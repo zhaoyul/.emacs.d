@@ -142,6 +142,10 @@
 (global-set-key (kbd "C-c t") 'counsel-load-theme)
 (global-set-key (kbd "C-c F") 'counsel-org-file)
 
+(defun my-org-confirm-babel-evaluate (lang body)
+  (not (string= lang "ditaa")))  ;don't ask for ditaa
+(setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
+
 
 (provide 'init-locales)
 ;;; init-locales.el ends here
