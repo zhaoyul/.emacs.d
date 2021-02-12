@@ -98,6 +98,9 @@
 (require-package 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
+(setq org-ellipsis " ▾")
+
+
 
 ;; 使用pandoc把org文件转为md, 需要安装pandoc
 (require-package 'ox-pandoc)
@@ -142,6 +145,7 @@
 (global-set-key (kbd "C-c t") 'counsel-load-theme)
 (global-set-key (kbd "C-c F") 'counsel-org-file)
 
+;; eval ditaa block in org file
 (defun my-org-confirm-babel-evaluate (lang body)
   (not (string= lang "ditaa")))  ;don't ask for ditaa
 (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
