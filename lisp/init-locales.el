@@ -93,6 +93,26 @@
   (mapcar (lambda(x) (define-key key-translation-map
                        (kbd (elt x 0)) (kbd (elt x 1)))) $replacePairs))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((R . t)
+   (clojure . t)
+   (latex . t)
+   (python . t)
+   (perl . t)
+   (js . t)
+   (shell . t)
+   (sql . t)
+   (org . t)
+   (ditaa . t)
+   (emacs-lisp . t)
+   (lisp . t)    ;; slime - lisp interaction mode
+   (gnuplot . t)))
+
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+
+
 
 ;; 使用org-bullets
 (require-package 'org-bullets)
@@ -100,6 +120,8 @@
 
 (setq org-ellipsis " ▾")
 
+(setq org-agenda-files '("~/sandbox/rc/learn-clojure/todo.org"))
+(setq org-latex-create-formula-image-program 'imagemagick)
 
 
 ;; 使用pandoc把org文件转为md, 需要安装pandoc
@@ -113,7 +135,7 @@
 (setq ivy-count-format "(%d/%d) ")
 (global-set-key (kbd "C-s") 'swiper-isearch)
 ;;(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;;(global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "M-y") 'counsel-yank-pop)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
 (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
@@ -121,7 +143,7 @@
 (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
 (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
 (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+;;(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
 (global-set-key (kbd "C-c v") 'ivy-push-view)
 (global-set-key (kbd "C-c V") 'ivy-pop-view)
 
@@ -150,6 +172,15 @@
   (not (string= lang "ditaa")))  ;don't ask for ditaa
 (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
 
+
+(defun try-convert (out)
+  (shell-command-on-region
+   (region-beginning) (region-end)
+   (format "convert.clj %s " out)
+   nil "REPLACE" nil t))
+(defun convert-to-edn  () (interactive) (try-convert "edn"))
+(defun convert-to-json () (interactive) (try-convert "json"))
+(defun convert-to-yaml () (interactive) (try-convert "yaml"))
 
 (provide 'init-locales)
 ;;; init-locales.el ends here
