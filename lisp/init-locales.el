@@ -109,6 +109,14 @@
    (lisp . t)    ;; slime - lisp interaction mode
    (gnuplot . t)))
 
+(setq org-confirm-babel-evaluate t)
+
+(require 'org-tempo)
+
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src elisp"))
+
+
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
 
@@ -135,7 +143,7 @@
 (setq ivy-count-format "(%d/%d) ")
 (global-set-key (kbd "C-s") 'swiper-isearch)
 ;;(global-set-key (kbd "M-x") 'counsel-M-x)
-;;(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "M-y") 'counsel-yank-pop)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
 (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
@@ -181,6 +189,30 @@
 (defun convert-to-edn  () (interactive) (try-convert "edn"))
 (defun convert-to-json () (interactive) (try-convert "json"))
 (defun convert-to-yaml () (interactive) (try-convert "yaml"))
+
+
+(require-package 'org-present)
+(eval-after-load "org-present"
+  '(progn
+     (add-hook 'org-present-mode-hook
+               (lambda ()
+                 (org-present-big)
+                 (org-display-inline-images)
+                 (org-present-hide-cursor)
+                 (org-present-read-only)))
+     (add-hook 'org-present-mode-quit-hook
+               (lambda ()
+                 (org-present-small)
+                 (org-remove-inline-images)
+                 (org-present-show-cursor)
+                 (org-present-read-write)))))
+
+(setq magit-log-margin-show-committer-date t)
+
+(require-package 'virtualenvwrapper)
+(require 'virtualenvwrapper)
+(venv-initialize-interactive-shells)
+(venv-initialize-eshell)
 
 (provide 'init-locales)
 ;;; init-locales.el ends here
