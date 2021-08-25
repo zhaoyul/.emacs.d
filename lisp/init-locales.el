@@ -282,6 +282,5 @@
 (yas-global-mode 1)
 
 
-
 (provide 'init-locales)
 ;;; init-locales.el ends here
