@@ -384,10 +384,5 @@
 ;;                        (concat (buffer-substring-no-properties beg end) "\n"))
 ;;   )
 
-
-
-
-
-
 (provide 'init-locales)
 ;;; init-locales.el ends here
