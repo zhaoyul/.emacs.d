@@ -136,13 +136,18 @@
 (require-package 'ox-pandoc)
 (load-library "ox-pandoc")
 
+(require-package 'smex)
+(require 'smex) ; Not needed if you use package.el
+(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+
+
 ;; counsel & ivy
 (require-package 'counsel)
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-count-format "(%d/%d) ")
 (global-set-key (kbd "C-s") 'swiper-isearch)
-;;(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "M-y") 'counsel-yank-pop)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -213,6 +218,9 @@
 (require 'virtualenvwrapper)
 (venv-initialize-interactive-shells)
 (venv-initialize-eshell)
+
+(setq org-babel-clojure-backend 'cider)
+
 
 (provide 'init-locales)
 ;;; init-locales.el ends here
