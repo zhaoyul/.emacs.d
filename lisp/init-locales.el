@@ -271,6 +271,8 @@
                    "say" "-v" osx-say-voice "-r"
                    (number-to-string (or $speed osx-say-speed)) $word)))
 
+(show-paren-mode 1)
+
 
 
 (provide 'init-locales)
