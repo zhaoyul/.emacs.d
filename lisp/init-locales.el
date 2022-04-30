@@ -273,6 +273,14 @@
 
 (show-paren-mode 1)
 
+(global-company-mode)
+
+(add-hook 'cider-repl-mode-hook #'company-mode)
+(add-hook 'cider-mode-hook #'company-mode)
+
+(require 'yasnippet)
+(yas-global-mode 1)
+
 
 
 (provide 'init-locales)

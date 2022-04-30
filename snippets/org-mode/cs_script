@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: cs script
+# key: cs
+# --
+
+#+begin_src csharp :tangle tmp/${1:`(random 100000)`}.csx
+  using System;
+  $0
+#+end_src
+
+#+begin_src bash
+  dotnett script tmp/$1.csx
+#+end_src
