@@ -33,7 +33,9 @@
 
 ;; 使用clj-kondo来做clj/cljc/cljs的语法检查, 需要安装clj-kondo
 (require-package 'flycheck-clj-kondo)
+
 (require 'flycheck-clj-kondo)
+
 (dolist (checker '(clj-kondo-clj clj-kondo-cljs clj-kondo-cljc clj-kondo-edn))
   (setq flycheck-checkers (cons checker (delq checker flycheck-checkers))))
 
@@ -108,6 +110,7 @@
    (sql . t)
    (org . t)
    (ditaa . t)
+   (plantuml . t)
    (emacs-lisp . t)
    (lisp . t)    ;; slime - lisp interaction mode
    (gnuplot . t)))
@@ -280,6 +283,37 @@
 
 (require 'yasnippet)
 (yas-global-mode 1)
+
+(require-package 'ob-mermaid)
+(require-package 'mermaid-mode)
+
+
+(with-eval-after-load 'ox-latex
+  ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
+  ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
+  ;; automatically to resolve the cross-references.
+  (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
+  (add-to-list 'org-latex-classes
+               '("elegantpaper"
+                 "\\documentclass[lang=cn]{elegantpaper}
+                 [NO-DEFAULT-PACKAGES]
+                 [PACKAGES]
+                 [EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (setq org-latex-listings 'minted)
+  (add-to-list 'org-latex-packages-alist '("" "minted")))
+
+(setq mac-command-key-is-meta t)
+(require-package 'eldoc)
+(load-library "eldoc")
+(require-package 'diff-hl)
+(load-library "diff-hl")
+
+(which-key-mode)
 
 
 (provide 'init-locales)
