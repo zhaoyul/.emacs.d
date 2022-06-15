@@ -232,7 +232,7 @@
 ;; Region lines and then `M-x osx-say' to make OSX speak.
 
 ;; Adjust speak speed
-(setq osx-say-speed 180)
+(setq osx-say-speed 250)
 
 ;; Change voice
 ;; Kathy, Vicki, Victoria, Alex, Bruce, Fred
@@ -314,6 +314,11 @@
 (load-library "diff-hl")
 
 (which-key-mode)
+;; epub reading
+(require-package 'nov)
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+
 
 
 (provide 'init-locales)
