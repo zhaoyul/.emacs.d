@@ -95,6 +95,8 @@
   (mapcar (lambda(x) (define-key key-translation-map
                        (kbd (elt x 0)) (kbd (elt x 1)))) $replacePairs))
 
+
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((R . t)
@@ -104,24 +106,39 @@
    (clojure . t)
    (latex . t)
    (python . t)
+   (csharp . t)
+   (java . t)
    (perl . t)
    (js . t)
    (shell . t)
    (sql . t)
    (org . t)
    (ditaa . t)
-   (plantuml . t)
    (emacs-lisp . t)
-   (lisp . t)    ;; slime - lisp interaction mode
+   (lisp . t) ;; slime - lisp interaction mode
    (gnuplot . t)))
+
 (setq org-plantuml-jar-path "~/.emacs.d/plantuml.jar")
 
 (setq org-confirm-babel-evaluate t)
 
 (require 'org-tempo)
 
-(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-(add-to-list 'org-structure-template-alist '("el" . "src elisp"))
+(setq org-structure-template-alist
+      '(("a" . "export ascii\n")
+        ("c" . "center\n")
+        ("C" . "comment\n")
+        ("e" . "example\n")
+        ("E" . "export")
+        ("h" . "export html\n")
+        ("l" . "export latex\n")
+        ("q" . "quote\n")
+        ("s" . "src\n")
+        ("sel" . "src elisp\n")
+        ("ssh" . "src shell\n")
+        ("scsx" . "src csharp :results pp\n")
+        ("v" . "verse\n")))
+
 
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
@@ -131,7 +148,9 @@
 
 ;; 使用org-bullets
 (require-package 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(add-hook 'org-mode-hook (lambda ()
+                           (org-bullets-mode 1)
+                           (org-indent-mode 1)))
 
 (setq org-ellipsis " ▾")
 
@@ -306,6 +325,8 @@
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   (setq org-latex-listings 'minted)
   (add-to-list 'org-latex-packages-alist '("" "minted")))
+(setq org-confirm-babel-evaluate nil)
+(setq org-babel-clojure-backend 'cider)
 
 (setq mac-command-key-is-meta t)
 (require-package 'eldoc)
@@ -317,6 +338,51 @@
 ;; epub reading
 (require-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+(add-to-list 'auto-mode-alist '("\\.csx\\'" . csharp-mode))
+
+
+;; python
+(setq org-babel-python-command "python3")
+
+(setq org-image-actual-width nil)
+
+(require 'pocket-reader)
+
+(define-key global-map (kbd "C-0") 'iterm-here)
+
+(defun iterm-here ()
+  (interactive)
+  (dired-smart-shell-command "open -a iTerm $PWD" nil nil))
+
+
+;; load java & C#
+
+;; (defun my-csharp-repl ()
+;;   "Switch to the CSharpRepl buffer, creating it if necessary."
+;;   (interactive)
+;;   (if-let ((buf (get-buffer "*csi*")))
+;;       (pop-to-buffer buf)
+;;     (progn (call-interactively 'csi)
+;;            (when-let ((buf (get-buffer "*csi*")))
+;;              (switch-to-buffer-other-window buf)))))
+
+;; (defun my-csharp-repl ()
+;;   "Switch to the CSharpRepl buffer, creating it if necessary."
+;;   (interactive)
+;;   (
+;;    save-window-excursion
+;;    (call-interactively 'csi)
+;;    (if-let ((buf (get-buffer "*CSharpRepl*")))
+;;        (pop-to-buffer buf)
+;;      (when-let ((b (make-comint "CSharpRepl" "csharp")))
+;;        (switch-to-buffer-other-window b)))))
+;; (define-key csharp-mode-map (kbd "C-c C-z") 'my-csharp-repl)
+
+;; (defun my-send (beg end)
+;;   (interactive "r")
+;;   (process-send-string (get-process "csi")
+;;                        (concat (buffer-substring-no-properties beg end) "\n"))
+;;   )
 
 
 
