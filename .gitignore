@@ -59,3 +59,5 @@ site-lisp/package/
 /url/
 /projects
 /projectile.cache
+/eww-bookmarks
+/nov-places
