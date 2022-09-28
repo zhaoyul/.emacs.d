@@ -108,6 +108,7 @@
    (python . t)
    (csharp . t)
    (java . t)
+   (powershell . t)
    (perl . t)
    (js . t)
    (shell . t)
@@ -251,11 +252,18 @@
 ;; Region lines and then `M-x osx-say' to make OSX speak.
 
 ;; Adjust speak speed
-(setq osx-say-speed 250)
+(setq osx-say-speed
+      (if (eq system-type 'windows-nt)
+          70
+        250))
 
 ;; Change voice
 ;; Kathy, Vicki, Victoria, Alex, Bruce, Fred
-(setq osx-say-voice "Alex")
+(setq osx-say-voice
+      (if (eq system-type 'windows-nt)
+          "2"
+        "Alex"))
+
 (setq osx-say-buffer "*osx say*")
 
 (defun osx-say-stop ()
@@ -263,10 +271,22 @@
   (when (get-buffer osx-say-buffer)
     (kill-buffer osx-say-buffer)))
 
+(setq osx-say-cmd
+      (if (eq system-type 'windows-nt)
+          "wsay"
+        "say"))
+
+(setq osx-say-speed-param
+      (if (eq system-type 'windows-nt)
+          "-s"
+        "-r"))
+
 (defun osx-say (&optional $word $speed)
-  "Utilize `say' command that Mac OSX has."
+  "Utilize `say' command that Mac OSX has/ or wsay on windows."
   (interactive)
-  (unless (executable-find "say")
+  (unless (or
+           (executable-find "wsay")
+           (executable-find "say"))
     (error (message "`say' command not found")))
   (osx-say-stop)
   (cond ($word $word)
@@ -290,7 +310,8 @@
          '("\|"  . "\\\\|")))
   (save-window-excursion
     (start-process "OSX Say" osx-say-buffer
-                   "say" "-v" osx-say-voice "-r"
+                   osx-say-cmd "-v" osx-say-voice
+                   osx-say-speed-param
                    (number-to-string (or $speed osx-say-speed)) $word)))
 
 (show-paren-mode 1)
@@ -339,7 +360,6 @@
 (require-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (add-to-list 'auto-mode-alist '("\\.csx\\'" . csharp-mode))
-
 
 ;; python
 (setq org-babel-python-command "python3")
