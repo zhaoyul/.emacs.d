@@ -404,5 +404,7 @@
 ;;                        (concat (buffer-substring-no-properties beg end) "\n"))
 ;;   )
 
+(setq system-time-locale "C")
+
 (provide 'init-locales)
 ;;; init-locales.el ends here
