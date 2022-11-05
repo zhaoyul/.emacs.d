@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: cmt
+# key: cmt
+# --
+/// <summary>
+    /// ${1:函数总结}
+    /// </summary>
+    /// <typeparam name="${2:类型参数}"></typeparam>
+    /// <param name="${3:输入参数}"></param>
+    /// <param name="${4:函数名}"></param>
+    /// <returns>${5:返回值}</returns>
+    $0

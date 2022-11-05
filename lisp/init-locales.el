@@ -23,8 +23,7 @@
   (set-selection-coding-system 'utf-8))
 
 ;; 中文对齐
-(require-package 'cnfonts)
-;; 我喜欢undotree
+(require-package 'cnfonts);; 我喜欢undotree
 (require-package 'undo-tree)
 (global-undo-tree-mode)
 
@@ -73,6 +72,7 @@
 (let (
       ($replacePairs
        [
+        ["·" "`"]
         ["，" ","]
         ["。" "."]
         ["；" ";"]
@@ -86,6 +86,7 @@
         ["／" "/"]
         ["《" "<"]
         ["》" ">"]
+        ["¥" "$"]
         ["‘" "'"]
         ["’" "'"]
         ["“" "\""]
@@ -135,12 +136,13 @@
         ("l" . "export latex\n")
         ("q" . "quote\n")
         ("s" . "src\n")
+        ("sdt" . "src ditaa :file \n")
+        ("sjs" . "src js :results output :exports both\n")
         ("sel" . "src elisp\n")
-        ("ssh" . "src shell\n")
-        ("scsx" . "src csharp :results pp\n")
+        ("scl" . "src clojure\n")
+        ("ssh" . "src shell :results pp :exports both\n")
+        ("scsx" . "src csharp :results pp :exports both\n")
         ("v" . "verse\n")))
-
-
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
@@ -153,7 +155,10 @@
                            (org-bullets-mode 1)
                            (org-indent-mode 1)))
 
-(setq org-ellipsis " ▾")
+;; ➽ ➼ ⬊
+;; ⇘ ↘ ⟱ ⤋ ↡ ↧ ⇩ ⬇ ▾  ⇲ ➘ ➴ ᐁ ᐯ ᗐ ￫ ⬥ ᗒ ᐉ ➥ ➻
+(setq org-ellipsis " ➘")
+
 
 (setq org-agenda-files '("~/sandbox/rc/learn-clojure/todo.org"))
 (setq org-latex-create-formula-image-program 'imagemagick)
@@ -262,7 +267,7 @@
 (setq osx-say-voice
       (if (eq system-type 'windows-nt)
           "2"
-        "Alex"))
+        "Samantha"))
 
 (setq osx-say-buffer "*osx say*")
 
@@ -318,8 +323,8 @@
 
 (global-company-mode)
 
-(add-hook 'cider-repl-mode-hook #'company-mode)
-(add-hook 'cider-mode-hook #'company-mode)
+;;(add-hook 'cider-repl-mode-hook #'company-mode)
+;;(add-hook 'cider-mode-hook #'company-mode)
 
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -360,6 +365,9 @@
 (require-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (add-to-list 'auto-mode-alist '("\\.csx\\'" . csharp-mode))
+(add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode))
+
 
 ;; python
 (setq org-babel-python-command "python3")
@@ -404,7 +412,62 @@
 ;;                        (concat (buffer-substring-no-properties beg end) "\n"))
 ;;   )
 
+
 (setq system-time-locale "C")
 
+;;(define-key js-mode-map [remap eval-last-sexp] #'js-comint-send-last-sexp)
+;;(define-key js-mode-map (kbd "C-c b") 'js-send-buffer)
+
+
+
+(eval-after-load
+    'company
+  '(add-to-list 'company-backends #'company-omnisharp))
+
+(defun my-csharp-mode-setup ()
+  (omnisharp-mode)
+  (company-mode)
+  (flycheck-mode)
+
+  (setq indent-tabs-mode nil)
+  (setq c-syntactic-indentation t)
+  (c-set-style "ellemtel")
+  (setq c-basic-offset 4)
+  (setq truncate-lines t)
+  (setq tab-width 4)
+  (setq evil-shift-width 4)
+
+  ;;csharp-mode README.md recommends this too
+  ;;(electric-pair-mode 1)       ;; Emacs 24
+  ;;(electric-pair-local-mode 1) ;; Emacs 25
+
+  (local-set-key (kbd "C-c r r") 'omnisharp-run-code-action-refactoring)
+  (local-set-key (kbd "M-.") 'omnisharp-go-to-definition)
+  (local-set-key (kbd "C-c C-t") 'omnisharp-unit-test-buffer)
+  (local-set-key (kbd "C-c C-p") 'omnisharp-unit-test-at-point)
+  (local-set-key (kbd "C-c C-c") 'recompile))
+
+;; (add-hook 'csharp-mode-hook
+;;           (lambda ()
+;;             (page-break-lines-mode)
+;;             (setq-local compile-command
+;;                         (concat "dotnet run "))))
+
+(defun find-cs-project-name ()
+  (let* ((project-name (file-name-directory (buffer-file-name)))
+         (paths (file-name-directory (buffer-file-name)))
+         (last-path (string-replace "/" "" (car (last (eshell-split-path paths))))))
+    last-path))
+
+
+(add-hook 'csharp-mode-hook 'my-csharp-mode-setup t)
+
+;; (projectile-register-project-type 'dotnet '("Program.cs")
+;;                                   :project-file "Program.cs"
+;;                                   :compile "dotnet build"
+;;                                   :test "dotnet test"
+;;                                   :run (concat "dotnet run" (find-cs-project-name))
+;;                                   :test-suffix "Tests")
+
 (provide 'init-locales)
 ;;; init-locales.el ends here

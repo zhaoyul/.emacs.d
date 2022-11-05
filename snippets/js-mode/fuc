@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: fuc
+# key: fuc
+# --
+function ${1:fname}(${2:params}) {
+  ${3:body}
+}

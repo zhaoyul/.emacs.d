@@ -33,7 +33,7 @@
 
 (defun ob-java--build-script-run-command (cmdline path)
   "Create run command according to the PATH."
-  (format "jshell %s %s" path (or cmdline " ")))
+  (format "jshell %s %s" (if (string-empty-p cmdline) "-q" cmdline ) path ))
 
 (defun org-babel-execute:java (body params)
   (let* ((processed-params (org-babel-process-params params))

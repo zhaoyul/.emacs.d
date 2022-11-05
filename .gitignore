@@ -59,5 +59,10 @@ site-lisp/package/
 /url/
 /projects
 /projectile.cache
+<<<<<<< HEAD
+=======
+/cnfonts/
+/url/
+>>>>>>> dc2a0d1 (update)
 /eww-bookmarks
 /nov-places
