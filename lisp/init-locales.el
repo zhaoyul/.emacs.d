@@ -374,8 +374,6 @@
 
 (setq org-image-actual-width nil)
 
-(require 'pocket-reader)
-
 (define-key global-map (kbd "C-0") 'iterm-here)
 
 (defun iterm-here ()
