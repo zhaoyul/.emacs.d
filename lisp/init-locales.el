@@ -101,6 +101,7 @@
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((R . t)
+   (C . t)
    (awk . t)
    (dot . t)
    (plantuml . t)
@@ -110,6 +111,7 @@
    (csharp . t)
    (java . t)
    (powershell . t)
+   (rust .  t)
    (perl . t)
    (js . t)
    (shell . t)
@@ -251,6 +253,18 @@
 (venv-initialize-interactive-shells)
 (venv-initialize-eshell)
 
+;; Set correct Python interpreter
+(setq venv-postactivate-hook
+      (list (lambda ()
+              (setq python-shell-interpreter (concat python-shell-virtualenv-path "bin/python3")))))
+(setq venv-postdeactivate-hook
+      (list (lambda ()
+              (setq python-shell-interpreter "python3"))))
+
+(require-package 'pyenv-mode)
+(pyenv-mode)
+
+
 (setq org-babel-clojure-backend 'cider)
 
 
@@ -367,10 +381,6 @@
 (add-to-list 'auto-mode-alist '("\\.csx\\'" . csharp-mode))
 (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode))
-
-
-;; python
-(setq org-babel-python-command "python3")
 
 (setq org-image-actual-width nil)
 
