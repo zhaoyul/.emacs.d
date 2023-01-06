@@ -73,10 +73,14 @@
       ($replacePairs
        [
         ["·" "`"]
+        ["～" "~"]
+        ["？" "?"]
         ["，" ","]
         ["。" "."]
         ["；" ";"]
         ["：" ":"]
+        ["「" "{"]
+        ["」" "]"]
         ["【" "["]
         ["】" "]"]
         ["（" "("]
@@ -96,6 +100,10 @@
   (mapcar (lambda(x) (define-key key-translation-map
                        (kbd (elt x 0)) (kbd (elt x 1)))) $replacePairs))
 
+
+(require 'ob-powershell)
+(require 'ob-rust)
+(require 'yasnippet)
 
 
 (org-babel-do-load-languages
@@ -259,8 +267,7 @@
               (setq python-shell-interpreter (concat python-shell-virtualenv-path "bin/python3")))))
 (setq venv-postdeactivate-hook
       (list (lambda ()
-              (setq python-shell-interpreter "python3"))))
-
+              (setq python-shell-interpreter "/opt/homebrew/bin/python3"))))
 (require-package 'pyenv-mode)
 (pyenv-mode)
 
