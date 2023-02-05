@@ -69,10 +69,8 @@
 (global-set-key (kbd "C-=") 'er/expand-region)
 
 ;; 映射全角字符到半角字符
-(let (
-      ($replacePairs
-       [
-        ["·" "`"]
+(let (($replacePairs
+       [["·" "`"]
         ["～" "~"]
         ["？" "?"]
         ["，" ","]
@@ -80,7 +78,7 @@
         ["；" ";"]
         ["：" ":"]
         ["「" "{"]
-        ["」" "]"]
+        ["」" "}"]
         ["【" "["]
         ["】" "]"]
         ["（" "("]
@@ -95,8 +93,12 @@
         ["’" "'"]
         ["“" "\""]
         ["”" "\""]
-        ]
-       ))
+        ;; 全角字符的特殊快捷键
+        ["M-。" "M-."]
+        ["M-…"  "M-^"]
+        ["M-》"  "M->"]
+        ["C-—" "C--"]
+        ["C-c C-，"  "C-c C-,"]]))
   (mapcar (lambda(x) (define-key key-translation-map
                        (kbd (elt x 0)) (kbd (elt x 1)))) $replacePairs))
 
@@ -154,7 +156,7 @@
         ("scsx" . "src csharp :results pp :exports both\n")
         ("v" . "verse\n")))
 
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
 
 
@@ -285,10 +287,11 @@
 
 ;; Change voice
 ;; Kathy, Vicki, Victoria, Alex, Bruce, Fred
+;; Chinese Tingting "Ting-Ting (Enhanced)"
 (setq osx-say-voice
       (if (eq system-type 'windows-nt)
           "2"
-        "Samantha"))
+        "Ting-Ting (Enhanced)"))
 
 (setq osx-say-buffer "*osx say*")
 
@@ -382,12 +385,18 @@
 (load-library "diff-hl")
 
 (which-key-mode)
-;; epub reading
+
+
+;; pdf tool
+(pdf-tools-install)
+
+;; epub pdf reading
 (require-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (add-to-list 'auto-mode-alist '("\\.csx\\'" . csharp-mode))
 (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
 
 (setq org-image-actual-width nil)
 
@@ -432,7 +441,6 @@
 
 ;;(define-key js-mode-map [remap eval-last-sexp] #'js-comint-send-last-sexp)
 ;;(define-key js-mode-map (kbd "C-c b") 'js-send-buffer)
-
 
 (eval-after-load
     'company
