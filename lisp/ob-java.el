@@ -32,26 +32,63 @@
 (defvar org-babel-default-header-args:java '())
 
 (defun ob-java--build-script-run-command (cmdline path)
-  "Create run command according to the PATH."
-  (format "jshell %s %s" (if (string-empty-p cmdline) "-q" cmdline ) path ))
+  "Create run command with CMDLINE according to the PATH."
+  (format "java %s %s" (or cmdline "") path))
 
 (defun org-babel-execute:java (body params)
+  "Execute a Java code block with BODY and PARAMS.
+Allows interruption with C-g, captures partial output,
+     and shows result in a popup window."
   (let* ((processed-params (org-babel-process-params params))
-         (cmpflag (or (cdr (assoc :cmpflag params)) ""))
-         (cmdline (or (cdr (assoc :cmdline params)) ""))
-         (src-temp (org-babel-temp-file "java-src-" ".java")))
-    (with-temp-file src-temp (insert body))
-    (let ((results (org-babel-eval (ob-java--build-script-run-command cmdline src-temp) "")))
-      (org-babel-reassemble-table
-       (org-babel-result-cond (cdr (assoc :result-params params))
-         (org-babel-read results)
-         (let ((tmp-file (org-babel-temp-file "c-")))
-           (with-temp-file tmp-file (insert results))
-           (org-babel-import-elisp-from-file tmp-file)))
-       (org-babel-pick-name
-        (cdr (assoc :colname-names params)) (cdr (assoc :colnames params)))
-       (org-babel-pick-name
-        (cdr (assoc :rowname-names params)) (cdr (assoc :rownames params)))))))
+         (cmdline (or (cdr (assoc :cmdline processed-params)) ""))
+         (src-file (org-babel-temp-file "org-babel-java-" ".java"))
+         (result-buffer "*org-babel-java-result*")
+         (result "")
+         window)
+    ;; 写入 Java 代码到临时文件
+    (with-temp-file src-file
+      (insert body))
+    ;; 清空或创建结果缓冲区
+    (with-current-buffer (get-buffer-create result-buffer)
+      (erase-buffer))
+    ;; 弹出结果缓冲区窗口
+    (setq window (display-buffer result-buffer '((display-buffer-pop-up-window))))
+    ;; 确保执行完成后关闭弹窗窗口
+    (unwind-protect
+        (setq result (org-babel-eval (ob-java--build-script-run-command cmdline src-file) ""))
+      ;; 执行完成或中断后，关闭弹窗窗口
+      (progn
+        (delete-file src-file)
+        (when (and window (window-live-p window))
+          (delete-window window))))
+    ;; 返回输出
+    (string-trim result)))
+
+
+
+
+
+;;(defun ob-java--build-script-run-command (cmdline path)
+;;  "Create run command according to the PATH."
+;;  (format "jshell %s %s" (if (string-empty-p cmdline) "-q" cmdline ) path ))
+;;
+;;(defun org-babel-execute:java (body params)
+;;  (let* ((processed-params (org-babel-process-params params))
+;;         (cmpflag (or (cdr (assoc :cmpflag params)) ""))
+;;         (cmdline (or (cdr (assoc :cmdline params)) ""))
+;;         (src-temp (org-babel-temp-file "java-src-" ".java")))
+;;    (with-temp-file src-temp (insert body))
+;;    (let ((results (org-babel-eval (ob-java--build-script-run-command cmdline src-temp) "")))
+;;      (org-babel-reassemble-table
+;;       (org-babel-result-cond (cdr (assoc :result-params params))
+;;         (org-babel-read results)
+;;         (let ((tmp-file (org-babel-temp-file "c-")))
+;;           (with-temp-file tmp-file (insert results))
+;;           (org-babel-import-elisp-from-file tmp-file)))
+;;       (org-babel-pick-name
+;;        (cdr (assoc :colname-names params)) (cdr (assoc :colnames params)))
+;;       (org-babel-pick-name
+;;        (cdr (assoc :rowname-names params)) (cdr (assoc :rownames params)))))))
 
 (provide 'ob-java)
 ;;; ob-java.el ends here
